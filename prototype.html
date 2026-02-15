@@ -4,824 +4,389 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Workroom Mini App</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-  --bg: #111113;
-  --bg2: #18181b;
-  --bg3: #1e1e22;
-  --bg4: #27272a;
-  --border: #2a2a2e;
-  --accent: #7c3aed;
-  --accent2: #6d28d9;
-  --text: #ffffff;
-  --muted: #71717a;
-  --green: #4ade80;
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0c0e;
+  --bg2:#141416;
+  --bg3:#1c1c1f;
+  --bg4:#252528;
+  --border:#2c2c30;
+  --accent:#7c3aed;
+  --accent-h:#6d28d9;
+  --text:#e4e4e7;
+  --text2:#a1a1aa;
+  --muted:#71717a;
+  --dim:#52525b;
 }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-/* ===== HEADER ===== */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.logo-text {
-  font-size: 11px;
-  letter-spacing: 4px;
-  font-weight: 300;
-  color: var(--text);
-}
-.logo-badge {
-  background: var(--accent);
-  font-size: 8px;
-  padding: 2px 5px;
-  border-radius: 3px;
-  letter-spacing: 1px;
-  font-weight: 600;
-}
-.credits-pill {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 5px 12px;
-  font-size: 13px;
-  font-weight: 600;
-}
-.credits-pill .coin { color: var(--accent); }
-
-/* ===== NAV ===== */
-.nav {
-  display: flex;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.nav-item {
-  flex: 1;
-  padding: 8px 0 6px;
-  text-align: center;
-  font-size: 10px;
-  color: var(--muted);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
-.nav-icon { font-size: 16px; display: block; margin-bottom: 1px; }
-
-/* ===== SCREENS ===== */
-.screen { display: none; flex: 1; flex-direction: column; overflow: hidden; }
-.screen.active { display: flex; }
-
-/* ===== AI CHAT ===== */
-.chat-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  flex-shrink: 0;
-}
-.model-selector {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 13px;
-  cursor: pointer;
-  color: var(--text);
-  transition: border-color 0.2s;
-}
-.model-selector:hover { border-color: var(--accent); }
-.model-selector .icon { font-size: 14px; }
-.model-selector .arrow { color: var(--muted); font-size: 10px; }
-.history-btn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--muted);
-  font-size: 13px;
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-.history-btn:hover { color: var(--text); }
-
-/* Model dropdown */
-.model-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 4px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 4px;
-  z-index: 100;
-  min-width: 200px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-}
-.model-dropdown.open { display: block; }
-.model-option {
-  padding: 10px 14px;
-  font-size: 13px;
-  cursor: pointer;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background 0.15s;
-}
-.model-option:hover { background: var(--bg4); }
-.model-option.selected { color: var(--accent); }
-.model-option .type { font-size: 11px; color: var(--muted); margin-left: auto; }
-.model-wrap { position: relative; }
-
-/* Chat messages */
-.chat-body {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 8px 16px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  max-width:480px;
+  margin:0 auto;
+  -webkit-font-smoothing:antialiased;
 }
 
-/* Empty state */
-.empty-state {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px 20px;
-  gap: 12px;
-}
-.empty-icon { font-size: 48px; opacity: 0.5; }
-.empty-title { font-size: 16px; color: var(--muted); line-height: 1.5; }
-.suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-.suggestion {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.suggestion:hover { border-color: var(--accent); background: var(--bg4); }
+/* HEADER */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.hdr-logo{display:flex;align-items:center;gap:8px}
+.hdr-logo span{font-size:11px;letter-spacing:3.5px;font-weight:400;color:var(--text2)}
+.hdr-badge{background:var(--accent);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;letter-spacing:.5px;font-weight:600}
+.hdr-credits{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 14px 5px 10px;font-size:13px;font-weight:500}
+.hdr-credits svg{width:16px;height:16px;opacity:.6}
 
-/* Message blocks */
-.msg-block { animation: fadeUp 0.25s ease; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } }
+/* NAV */
+.nav{display:flex;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
+.nav-i{flex:1;padding:8px 0 6px;text-align:center;font-size:10px;color:var(--muted);cursor:pointer;border-top:2px solid transparent;transition:color .15s;-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav-i.on{color:var(--accent);border-top-color:var(--accent)}
+.nav-i svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 
-.msg-user-block {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 14px;
-}
-.msg-user-label {
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 4px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.msg-user-text { font-size: 14px; line-height: 1.5; }
+/* SCREENS */
+.scr{display:none;flex:1;flex-direction:column;overflow:hidden}
+.scr.on{display:flex}
 
-.msg-ai-block {
-  padding: 0;
-}
-.msg-ai-label {
-  font-size: 11px;
-  color: var(--accent);
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 600;
-}
-.msg-ai-text {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #d4d4d8;
-}
-.msg-ai-meta {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-  flex-wrap: wrap;
-}
-.meta-tag {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  padding: 3px 10px;
-  border-radius: 10px;
-  font-size: 11px;
-  color: var(--muted);
-}
-.meta-tag b { color: var(--text); font-weight: 500; }
+/* CHAT HEADER */
+.ch-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0}
+.mdl-sel{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text);transition:border-color .15s;position:relative}
+.mdl-sel:hover{border-color:var(--accent)}
+.mdl-sel svg{width:16px;height:16px}
+.mdl-arrow{color:var(--dim);font-size:10px;margin-left:2px}
+.hist-btn{display:flex;align-items:center;gap:5px;color:var(--text2);font-size:13px;cursor:pointer;background:none;border:none;font-family:inherit}
+.hist-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5}
+.hist-btn:hover{color:var(--text)}
 
-/* Result card */
-.result-card {
-  border-radius: 12px;
-  overflow: hidden;
-  margin-top: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg3);
-}
-.result-image {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  display: block;
-}
-.result-footer {
-  padding: 10px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.result-cost { font-size: 12px; color: var(--muted); }
-.result-actions { display: flex; gap: 6px; }
-.r-btn {
-  background: var(--bg4);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.r-btn:hover { border-color: var(--accent); }
-.r-btn-primary { background: var(--accent); border-color: var(--accent); }
+/* Dropdown */
+.dd{display:none;position:absolute;top:calc(100% + 4px);left:0;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:4px;z-index:99;min-width:210px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.dd.open{display:block}
+.dd-i{padding:9px 12px;font-size:13px;cursor:pointer;border-radius:7px;display:flex;align-items:center;gap:8px;color:var(--text2);transition:all .12s}
+.dd-i:hover{background:var(--bg4);color:var(--text)}
+.dd-i.sel{color:var(--accent)}
+.dd-i .t{margin-left:auto;font-size:11px;color:var(--dim)}
+.mdl-wrap{position:relative}
+
+/* CHAT BODY */
+.ch-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 16px 16px;display:flex;flex-direction:column;gap:14px}
+
+/* Empty */
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;gap:16px}
+.empty-ico{width:48px;height:48px;opacity:.35}
+.empty-ico svg{width:48px;height:48px;stroke:var(--text2);fill:none;stroke-width:1}
+.empty-t{font-size:15px;color:var(--text2);line-height:1.6;font-weight:300}
+.suggs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
+.sug{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:8px 16px;border-radius:20px;font-size:13px;cursor:pointer;transition:all .15s;font-weight:400;-webkit-tap-highlight-color:transparent}
+.sug:hover{border-color:var(--accent);color:var(--text);background:var(--bg4)}
+
+/* Messages */
+.mb{animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(4px)}}
+.u-msg{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.u-lbl{font-size:11px;color:var(--dim);margin-bottom:3px;font-weight:500;display:flex;align-items:center;gap:4px}
+.u-lbl svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.u-txt{font-size:14px;line-height:1.55;color:var(--text)}
+
+.ai-lbl{font-size:11px;color:var(--accent);margin-bottom:5px;font-weight:600;display:flex;align-items:center;gap:4px}
+.ai-lbl svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.ai-txt{font-size:14px;line-height:1.55;color:var(--text2)}
+.ai-meta{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.mtag{background:var(--bg3);border:1px solid var(--border);padding:3px 9px;border-radius:8px;font-size:11px;color:var(--dim)}
+.mtag b{color:var(--text2);font-weight:500}
+
+/* Result */
+.res{border-radius:10px;overflow:hidden;margin-top:8px;border:1px solid var(--border);background:var(--bg3)}
+.res img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.res-ft{padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
+.res-info{font-size:12px;color:var(--dim)}
+.res-acts{display:flex;gap:5px}
+.rb{background:var(--bg4);border:1px solid var(--border);color:var(--text2);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.rb:hover{border-color:var(--accent);color:var(--text)}
+.rb svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5}
+.rb-p{background:var(--accent);border-color:var(--accent);color:#fff}
 
 /* Progress */
-.progress-wrap { margin-top: 8px; }
-.progress-text { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-.progress-bar {
-  width: 100%;
-  height: 4px;
-  background: var(--bg4);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), #a78bfa);
-  border-radius: 2px;
-  animation: loading 2.5s ease-in-out infinite;
-}
-@keyframes loading { 0%{width:5%} 50%{width:80%} 100%{width:100%} }
+.pbar{width:100%;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-top:8px}
+.pfill{height:100%;background:linear-gradient(90deg,var(--accent),#a78bfa);border-radius:2px;animation:ld 2.5s ease-in-out infinite}
+@keyframes ld{0%{width:5%}50%{width:80%}100%{width:100%}}
 
-/* ===== INPUT AREA ===== */
-.input-area {
-  padding: 10px 16px 12px;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-}
-.input-box {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  padding: 4px 6px 4px 14px;
-  transition: border-color 0.2s;
-}
-.input-box:focus-within { border-color: var(--accent); }
-.input-box input {
-  flex: 1;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 14px;
-  padding: 8px 4px;
-  outline: none;
-}
-.input-box input::placeholder { color: var(--muted); }
-.attach-btn {
-  background: none;
-  border: none;
-  color: var(--muted);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 50%;
-}
-.attach-btn:hover { color: var(--text); }
-.send-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
-}
-.send-btn:hover { background: var(--accent2); }
+/* INPUT */
+.inp-area{padding:10px 16px 12px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0;display:flex;gap:8px;align-items:flex-end}
+.inp-box{flex:1;display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:22px;padding:4px 8px 4px 16px;transition:border-color .15s}
+.inp-box:focus-within{border-color:var(--accent)}
+.inp-box input{flex:1;background:none;border:none;color:var(--text);font-size:14px;padding:9px 4px;outline:none;font-family:inherit;font-weight:400}
+.inp-box input::placeholder{color:var(--dim)}
+.att{background:none;border:none;color:var(--dim);cursor:pointer;padding:6px;display:flex;align-items:center}
+.att svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5}
+.att:hover{color:var(--text2)}
+.snd{width:38px;height:38px;border-radius:50%;background:var(--accent);border:none;color:#fff;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .12s}
+.snd:hover{background:var(--accent-h)}
+.snd svg{width:16px;height:16px;fill:currentColor;stroke:none}
 
-/* ===== OTHER SCREENS ===== */
-.page-scroll {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 20px 16px;
-}
-
-/* Cards */
-.card {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-}
-.card-title {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-.row:last-child { border-bottom: none; }
-.row-label { color: var(--muted); }
-.row-value { display: flex; align-items: center; gap: 6px; }
+/* PAGES */
+.pg{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px}
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.card-t{font-size:11px;color:var(--dim);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
+.row:last-child{border-bottom:none}
+.row-l{color:var(--text2)}
+.row-v{color:var(--text);display:flex;align-items:center;gap:4px}
+.row-v svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;color:var(--dim);cursor:pointer}
 
 /* Profile */
-.profile-top {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-.avatar-circle {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-}
-.profile-name { font-size: 15px; font-weight: 600; }
-.profile-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.prof{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.av{width:48px;height:48px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;flex-shrink:0;color:#fff}
+.p-name{font-size:15px;font-weight:600}
+.p-sub{font-size:12px;color:var(--dim);margin-top:1px}
 
-/* Plan card */
-.plan-card {
-  background: linear-gradient(135deg, var(--bg3) 0%, #2d1b69 100%);
-  border: 1px solid var(--accent);
-  border-radius: 14px;
-  padding: 18px;
-  margin-bottom: 14px;
-}
-.plan-name { font-size: 22px; font-weight: 700; }
-.plan-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-.bar { width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; margin:14px 0 6px; }
-.bar-fill { height:100%; background:var(--accent); border-radius:3px; width:100%; }
-.bar-info { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); }
+/* Plan */
+.plan{background:linear-gradient(135deg,var(--bg3) 0%,#1a1035 100%);border:1px solid #3b2270;border-radius:12px;padding:18px;margin-bottom:14px}
+.plan-n{font-size:22px;font-weight:700}
+.plan-s{font-size:12px;color:var(--text2);margin-top:2px}
+.bar-w{width:100%;height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin:14px 0 6px}
+.bar-f{height:100%;background:var(--accent);border-radius:3px;width:100%}
+.bar-i{display:flex;justify-content:space-between;font-size:11px;color:var(--dim)}
 
-.btn-full {
-  width: 100%;
-  padding: 13px;
-  border-radius: 10px;
-  border: none;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: all 0.15s;
-}
-.btn-accent { background: var(--accent); color: white; }
-.btn-accent:hover { background: var(--accent2); }
-.btn-outline { background:none; border:1px solid #ef4444; color:#ef4444; }
-.btn-outline-muted { background:none; border:1px solid var(--border); color:var(--muted); }
+.btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:14px;font-weight:500;cursor:pointer;margin-top:10px;font-family:inherit;transition:all .12s}
+.btn-a{background:var(--accent);color:#fff}
+.btn-a:hover{background:var(--accent-h)}
+.btn-r{background:none;border:1px solid #dc2626;color:#dc2626}
+.btn-m{background:none;border:1px solid var(--border);color:var(--dim)}
+
+/* Pricing */
+.pr-c{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.pr-c.ft{border-color:var(--accent)}
+.pr-n{font-size:14px;font-weight:500}
+.pr-cr{font-size:12px;color:var(--dim);margin-top:1px}
+.pr-p{font-size:18px;font-weight:700}
+.pr-p span{font-size:12px;color:var(--dim);font-weight:400}
+.badge{background:var(--accent);font-size:8px;padding:2px 5px;border-radius:3px;margin-left:6px;font-weight:600;vertical-align:middle;color:#fff}
 
 /* Settings */
-.setting-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
-.setting-row:last-child { border-bottom: none; }
-.setting-name { font-size: 14px; }
-.setting-desc { font-size: 11px; color: var(--muted); margin-top: 1px; }
-.toggle {
-  width: 42px; height: 22px;
-  background: var(--bg4);
-  border-radius: 11px;
-  position: relative;
-  cursor: pointer;
-  transition: background 0.2s;
-  flex-shrink: 0;
-}
-.toggle.on { background: var(--accent); }
-.toggle::after {
-  content: '';
-  position: absolute;
-  width: 18px; height: 18px;
-  background: white;
-  border-radius: 50%;
-  top: 2px; left: 2px;
-  transition: transform 0.2s;
-}
-.toggle.on::after { transform: translateX(20px); }
-.sel-btn {
-  background: var(--bg4);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 5px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  cursor: pointer;
-}
+.s-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.s-row:last-child{border-bottom:none}
+.s-n{font-size:14px;color:var(--text)}
+.s-d{font-size:11px;color:var(--dim);margin-top:1px}
+.tgl{width:40px;height:22px;background:var(--bg4);border-radius:11px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.tgl.on{background:var(--accent)}
+.tgl::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform .2s}
+.tgl.on::after{transform:translateX(18px)}
+.s-btn{background:var(--bg4);border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:7px;font-size:12px;cursor:pointer;font-family:inherit}
 
-/* Pricing mini cards */
-.price-card {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.price-card.featured { border-color: var(--accent); }
-.price-left .p-name { font-size: 14px; font-weight: 600; }
-.price-left .p-credits { font-size: 12px; color: var(--muted); margin-top: 2px; }
-.price-right { font-size: 18px; font-weight: 700; }
-.price-right span { font-size: 12px; color: var(--muted); font-weight: 400; }
-.badge-best {
-  background: var(--accent);
-  font-size: 9px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-left: 6px;
-  font-weight: 600;
-  vertical-align: middle;
-}
+.sec-t{font-size:14px;font-weight:600;margin:20px 0 10px;color:var(--text)}
 
 /* FAQ */
-.faq-item {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-.faq-item:hover { border-color: var(--accent); }
-.faq-q { font-size: 14px; font-weight: 500; }
-.faq-a { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
-
-.section-title { font-size: 15px; font-weight: 600; margin: 20px 0 10px; }
+.faq{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:border-color .12s}
+.faq:hover{border-color:var(--accent)}
+.faq-q{font-size:14px;font-weight:500}
+.faq-a{font-size:13px;color:var(--dim);margin-top:5px;line-height:1.5}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-left">
-    <span class="logo-text">EVERYPIXEL</span>
-    <span class="logo-badge">WorkRoom</span>
+<div class="hdr">
+  <div class="hdr-logo">
+    <span>EVERYPIXEL</span>
+    <span class="hdr-badge">WorkRoom</span>
   </div>
-  <div class="credits-pill"><span class="coin">🪙</span> <span id="credit-count">200</span></div>
+  <div class="hdr-credits">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+    <span id="cc">200</span>
+  </div>
 </div>
 
-<!-- ===== SCREEN: AI CHAT ===== -->
-<div class="screen active" id="s-chat">
-  <!-- Model selector row -->
-  <div class="chat-header">
-    <div class="model-wrap">
-      <div class="model-selector" onclick="toggleModels()">
-        <span class="icon">✨</span>
-        <span id="current-model">Seedream 4.0</span>
-        <span class="arrow">▾</span>
+<!-- AI CHAT -->
+<div class="scr on" id="s-chat">
+  <div class="ch-hdr">
+    <div class="mdl-wrap">
+      <div class="mdl-sel" onclick="toggleDD()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7L12 16.4 5.7 21l2.3-7L2 9.4h7.6z"/></svg>
+        <span id="cm">Seedream 4.0</span>
+        <span class="mdl-arrow">▾</span>
       </div>
-      <div class="model-dropdown" id="model-dropdown">
-        <div class="model-option selected" onclick="pickModel('Seedream 4.0','🖼')">✨ Seedream 4.0 <span class="type">Image</span></div>
-        <div class="model-option" onclick="pickModel('FLUX','🖼')">🎨 FLUX <span class="type">Image</span></div>
-        <div class="model-option" onclick="pickModel('Ideogram 3.0','🖼')">💡 Ideogram 3.0 <span class="type">Image</span></div>
-        <div class="model-option" onclick="pickModel('WAN 2.2','🎬')">🎬 WAN 2.2 <span class="type">Video</span></div>
-        <div class="model-option" onclick="pickModel('Lip Sync','👄')">👄 Lip Sync <span class="type">Video</span></div>
-        <div class="model-option" onclick="pickModel('Voice Studio','🎤')">🎤 Voice Studio <span class="type">Audio</span></div>
-      </div>
-    </div>
-    <button class="history-btn">🕐 History</button>
-  </div>
-
-  <!-- Chat body -->
-  <div class="chat-body" id="chat-body">
-    <!-- Empty state -->
-    <div class="empty-state" id="empty-state">
-      <div class="empty-icon">✨</div>
-      <div class="empty-title">Describe what you want to create,<br>or pick a starting point</div>
-      <div class="suggestions">
-        <div class="suggestion" onclick="useSuggestion('A woman walking through a cyberpunk city at night')">🌆 Cyberpunk city</div>
-        <div class="suggestion" onclick="useSuggestion('Product shot of a perfume bottle on marble')">📸 Product shot</div>
-        <div class="suggestion" onclick="useSuggestion('Cinematic ocean waves at sunset, slow motion')">🎬 Ocean sunset</div>
-        <div class="suggestion" onclick="useSuggestion('Professional voiceover for a tech ad')">🎤 Voiceover</div>
+      <div class="dd" id="dd">
+        <div class="dd-i sel" onclick="pm('Seedream 4.0')">Seedream 4.0<span class="t">Image</span></div>
+        <div class="dd-i" onclick="pm('FLUX')">FLUX<span class="t">Image</span></div>
+        <div class="dd-i" onclick="pm('Ideogram 3.0')">Ideogram 3.0<span class="t">Image</span></div>
+        <div class="dd-i" onclick="pm('WAN 2.2')">WAN 2.2<span class="t">Video</span></div>
+        <div class="dd-i" onclick="pm('Voice Studio')">Voice Studio<span class="t">Audio</span></div>
+        <div class="dd-i" onclick="pm('Lip Sync')">Lip Sync<span class="t">Video</span></div>
       </div>
     </div>
+    <button class="hist-btn">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      History
+    </button>
   </div>
 
-  <!-- Input -->
-  <div class="input-area">
-    <div class="input-box">
-      <input type="text" placeholder="Describe what you want..." id="prompt-input" onkeydown="if(event.key==='Enter')generate()">
-      <button class="attach-btn">📎</button>
-    </div>
-    <button class="send-btn" onclick="generate()">➤</button>
-  </div>
-</div>
-
-<!-- ===== SCREEN: ACCOUNT ===== -->
-<div class="screen" id="s-account">
-  <div class="page-scroll">
-    <div class="profile-top">
-      <div class="avatar-circle">V</div>
-      <div>
-        <div class="profile-name">vtarnakin@mail.ru</div>
-        <div class="profile-sub">vtarnakin@mail.ru</div>
+  <div class="ch-body" id="cb">
+    <div class="empty" id="emp">
+      <div class="empty-ico"><svg viewBox="0 0 48 48" stroke-width=".8"><path d="M24 4l5 15h16l-13 9 5 15-13-9-13 9 5-15L3 19h16z" stroke="currentColor" fill="none"/></svg></div>
+      <div class="empty-t">Describe what you want to create,<br>or pick a starting point</div>
+      <div class="suggs">
+        <div class="sug" onclick="us('A woman walking through a cyberpunk city at night, neon lights')">Cyberpunk city</div>
+        <div class="sug" onclick="us('Product shot of a perfume bottle on marble surface')">Product shot</div>
+        <div class="sug" onclick="us('Cinematic ocean waves at sunset, slow motion, 5s')">Ocean sunset</div>
+        <div class="sug" onclick="us('Professional voiceover for a tech product ad')">Voiceover</div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title">Account Info</div>
-      <div class="row"><span class="row-label">Username</span><span class="row-value">vtarnakin ✏️</span></div>
-      <div class="row"><span class="row-label">Email</span><span class="row-value">vtarnakin@mail.ru ✏️</span></div>
-      <div class="row"><span class="row-label">Password</span><span class="row-value">••••••••• ✏️</span></div>
-      <div class="row"><span class="row-label">Provider</span><span class="row-value">Email/Password</span></div>
-      <div class="row"><span class="row-label">Verified</span><span class="row-value" style="color:#f87171">No ⚠️</span></div>
+  </div>
+
+  <div class="inp-area">
+    <div class="inp-box">
+      <input type="text" placeholder="Describe what you want..." id="pi" onkeydown="if(event.key==='Enter')go()">
+      <button class="att"><svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
     </div>
-    <div class="card">
-      <div class="card-title">Credit History</div>
-      <div class="row"><span>Subscription</span><span class="row-value">Trial · <span style="color:var(--green)">+200 🪙</span></span></div>
-    </div>
-    <button class="btn-full btn-outline">🚪 Log out</button>
+    <button class="snd" onclick="go()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
   </div>
 </div>
 
-<!-- ===== SCREEN: CREDITS ===== -->
-<div class="screen" id="s-credits">
-  <div class="page-scroll">
-    <div class="plan-card">
-      <div class="plan-name">Trial</div>
-      <div class="plan-sub">200 Credits · One-time</div>
-      <div class="bar"><div class="bar-fill"></div></div>
-      <div class="bar-info"><span>200/200 left</span><span>Valid: Mar 18, 2026</span></div>
-    </div>
-    <button class="btn-full btn-accent">⬆️ Upgrade Plan</button>
-    <div class="section-title">Plans</div>
-    <div class="price-card">
-      <div class="price-left"><div class="p-name">Starter</div><div class="p-credits">720 credits/mo</div></div>
-      <div class="price-right">$9.99<span>/mo</span></div>
-    </div>
-    <div class="price-card featured">
-      <div class="price-left"><div class="p-name">Standard<span class="badge-best">BEST</span></div><div class="p-credits">1560 credits/mo</div></div>
-      <div class="price-right">$19.99<span>/mo</span></div>
-    </div>
-    <div class="price-card">
-      <div class="price-left"><div class="p-name">Professional</div><div class="p-credits">4240 credits/mo</div></div>
-      <div class="price-right">$49.99<span>/mo</span></div>
-    </div>
-    <div class="section-title">Payment History</div>
-    <div class="card" style="text-align:center;padding:24px;color:var(--muted)">No spending yet</div>
-  </div>
-</div>
-
-<!-- ===== SCREEN: HELP ===== -->
-<div class="screen" id="s-help">
-  <div class="page-scroll">
-    <div class="section-title" style="margin-top:0">Help Center</div>
-    <div class="faq-item"><div class="faq-q">🖼 How to generate images?</div><div class="faq-a">Type a description in the AI chat. You can specify ratio, resolution directly in the prompt. E.g. "a cat in space, 16:9, high quality"</div></div>
-    <div class="faq-item"><div class="faq-q">🎬 How to create videos?</div><div class="faq-a">Switch model to WAN 2.2 and describe your scene. You can also say "make a video from this" after generating an image.</div></div>
-    <div class="faq-item"><div class="faq-q">🪙 How do credits work?</div><div class="faq-a">Images cost ~2 credits, videos ~40 credits. Your balance is shown in the top right. Upgrade for more.</div></div>
-    <div class="faq-item"><div class="faq-q">💬 Can AI remember context?</div><div class="faq-a">Yes! Say "make it bluer" or "now as a video" — the AI remembers your previous requests in this session.</div></div>
-    <div class="faq-item"><div class="faq-q">🔗 Full web version</div><div class="faq-a">Visit app.everypixel.com for the complete desktop experience with all tools.</div></div>
-    <div style="text-align:center;margin-top:20px;color:var(--muted);font-size:13px">
-      Need help? <a href="mailto:workroom@everypixel.com" style="color:var(--accent)">workroom@everypixel.com</a>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SCREEN: SETTINGS ===== -->
-<div class="screen" id="s-settings">
-  <div class="page-scroll">
-    <div class="section-title" style="margin-top:0">AI Settings</div>
-    <div class="card">
-      <div class="setting-row"><div><div class="setting-name">Default Image Model</div></div><button class="sel-btn">Seedream 4.0 ▾</button></div>
-      <div class="setting-row"><div><div class="setting-name">Default Video Model</div></div><button class="sel-btn">WAN 2.2 ▾</button></div>
-      <div class="setting-row"><div><div class="setting-name">Language</div></div><button class="sel-btn">English ▾</button></div>
+<!-- ACCOUNT -->
+<div class="scr" id="s-account">
+  <div class="pg">
+    <div class="prof">
+      <div class="av">V</div>
+      <div><div class="p-name">vtarnakin@mail.ru</div><div class="p-sub">vtarnakin@mail.ru</div></div>
     </div>
     <div class="card">
-      <div class="setting-row"><div><div class="setting-name">Auto-save to Assets</div><div class="setting-desc">Save results automatically</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="setting-row"><div><div class="setting-name">Show cost before generating</div><div class="setting-desc">Preview credit usage</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="setting-row"><div><div class="setting-name">Enhanced prompts</div><div class="setting-desc">AI improves your prompts</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="setting-row"><div><div class="setting-name">Keep chat history</div><div class="setting-desc">Between sessions</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="card-t">Account Info</div>
+      <div class="row"><span class="row-l">Username</span><span class="row-v">vtarnakin <svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></span></div>
+      <div class="row"><span class="row-l">Email</span><span class="row-v">vtarnakin@mail.ru <svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></span></div>
+      <div class="row"><span class="row-l">Password</span><span class="row-v">••••••••• <svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></span></div>
+      <div class="row"><span class="row-l">Provider</span><span class="row-v">Email/Password</span></div>
+      <div class="row"><span class="row-l">Verified</span><span class="row-v" style="color:#f87171">No</span></div>
     </div>
-    <button class="btn-full btn-outline-muted">🗑 Clear Chat History</button>
+    <div class="card">
+      <div class="card-t">Credit History</div>
+      <div class="row"><span class="row-l">Subscription</span><span class="row-v">Trial · <span style="color:#4ade80">+200</span></span></div>
+    </div>
+    <button class="btn btn-r">Log out</button>
   </div>
 </div>
 
-<!-- NAV -->
+<!-- CREDITS -->
+<div class="scr" id="s-credits">
+  <div class="pg">
+    <div class="plan">
+      <div class="plan-n">Trial</div>
+      <div class="plan-s">200 Credits · One-time</div>
+      <div class="bar-w"><div class="bar-f"></div></div>
+      <div class="bar-i"><span>200/200 left</span><span>Valid: Mar 18, 2026</span></div>
+    </div>
+    <button class="btn btn-a">Upgrade Plan</button>
+    <div class="sec-t">Plans</div>
+    <div class="pr-c"><div><div class="pr-n">Starter</div><div class="pr-cr">720 credits/mo</div></div><div class="pr-p">$9.99<span>/mo</span></div></div>
+    <div class="pr-c ft"><div><div class="pr-n">Standard<span class="badge">BEST</span></div><div class="pr-cr">1560 credits/mo</div></div><div class="pr-p">$19.99<span>/mo</span></div></div>
+    <div class="pr-c"><div><div class="pr-n">Professional</div><div class="pr-cr">4240 credits/mo</div></div><div class="pr-p">$49.99<span>/mo</span></div></div>
+    <div class="sec-t">Payment History</div>
+    <div class="card" style="text-align:center;padding:24px;color:var(--dim);font-size:13px">No spending yet</div>
+  </div>
+</div>
+
+<!-- HELP -->
+<div class="scr" id="s-help">
+  <div class="pg">
+    <div class="sec-t" style="margin-top:0">Help Center</div>
+    <div class="faq"><div class="faq-q">How to generate images?</div><div class="faq-a">Type a description in the AI chat. Specify ratio, style, quality in the prompt. E.g. "a cat in space, 16:9"</div></div>
+    <div class="faq"><div class="faq-q">How to create videos?</div><div class="faq-a">Switch to WAN 2.2 model and describe your scene. Or say "make a video from this" after generating an image.</div></div>
+    <div class="faq"><div class="faq-q">How do credits work?</div><div class="faq-a">Images ~2 credits, videos ~40 credits. Balance shown top-right. Upgrade for more.</div></div>
+    <div class="faq"><div class="faq-q">Can AI remember context?</div><div class="faq-a">Yes. Say "make it bluer" or "now as video" — AI keeps context within the session.</div></div>
+    <div class="faq"><div class="faq-q">Full web version</div><div class="faq-a">Visit app.everypixel.com for the complete desktop experience.</div></div>
+    <div style="text-align:center;margin-top:20px;font-size:12px;color:var(--dim)">Need help? <a href="mailto:workroom@everypixel.com" style="color:var(--accent)">workroom@everypixel.com</a></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="scr" id="s-settings">
+  <div class="pg">
+    <div class="sec-t" style="margin-top:0">AI Settings</div>
+    <div class="card">
+      <div class="s-row"><div><div class="s-n">Default Image Model</div></div><button class="s-btn">Seedream 4.0 ▾</button></div>
+      <div class="s-row"><div><div class="s-n">Default Video Model</div></div><button class="s-btn">WAN 2.2 ▾</button></div>
+      <div class="s-row"><div><div class="s-n">Language</div></div><button class="s-btn">English ▾</button></div>
+    </div>
+    <div class="card">
+      <div class="s-row"><div><div class="s-n">Auto-save to Assets</div><div class="s-d">Save generated content automatically</div></div><div class="tgl on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="s-row"><div><div class="s-n">Show cost before generating</div><div class="s-d">Preview credit usage</div></div><div class="tgl on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="s-row"><div><div class="s-n">Enhanced prompts</div><div class="s-d">AI improves your prompts</div></div><div class="tgl on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="s-row"><div><div class="s-n">Keep chat history</div><div class="s-d">Preserve context between sessions</div></div><div class="tgl on" onclick="this.classList.toggle('on')"></div></div>
+    </div>
+    <button class="btn btn-m">Clear Chat History</button>
+  </div>
+</div>
+
+<!-- NAV BAR -->
 <div class="nav">
-  <div class="nav-item active" data-screen="chat"><span class="nav-icon">🤖</span>AI</div>
-  <div class="nav-item" data-screen="account"><span class="nav-icon">👤</span>Account</div>
-  <div class="nav-item" data-screen="credits"><span class="nav-icon">💳</span>Credits</div>
-  <div class="nav-item" data-screen="help"><span class="nav-icon">❓</span>Help</div>
-  <div class="nav-item" data-screen="settings"><span class="nav-icon">⚙️</span>Settings</div>
+  <div class="nav-i on" data-s="chat">
+    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+    AI
+  </div>
+  <div class="nav-i" data-s="account">
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Account
+  </div>
+  <div class="nav-i" data-s="credits">
+    <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+    Credits
+  </div>
+  <div class="nav-i" data-s="help">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Help
+  </div>
+  <div class="nav-i" data-s="settings">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Settings
+  </div>
 </div>
 
 <script>
-// Navigation
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    item.classList.add('active');
-    document.getElementById('s-' + item.dataset.screen).classList.add('active');
+document.querySelectorAll('.nav-i').forEach(n=>{
+  n.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-i').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.scr').forEach(x=>x.classList.remove('on'));
+    n.classList.add('on');
+    document.getElementById('s-'+n.dataset.s).classList.add('on');
   });
 });
 
-// Model selector
-function toggleModels() {
-  document.getElementById('model-dropdown').classList.toggle('open');
+function toggleDD(){document.getElementById('dd').classList.toggle('open')}
+function pm(n){
+  document.getElementById('cm').textContent=n;
+  document.getElementById('dd').classList.remove('open');
+  document.querySelectorAll('.dd-i').forEach(o=>o.classList.toggle('sel',o.textContent.includes(n)));
 }
-function pickModel(name) {
-  document.getElementById('current-model').textContent = name;
-  document.getElementById('model-dropdown').classList.remove('open');
-  document.querySelectorAll('.model-option').forEach(o => {
-    o.classList.toggle('selected', o.textContent.includes(name));
-  });
-}
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.model-wrap')) {
-    document.getElementById('model-dropdown').classList.remove('open');
-  }
-});
+document.addEventListener('click',e=>{if(!e.target.closest('.mdl-wrap'))document.getElementById('dd').classList.remove('open')});
 
-// Suggestions
-function useSuggestion(text) {
-  document.getElementById('prompt-input').value = text;
-  generate();
-}
+function us(t){document.getElementById('pi').value=t;go()}
 
-// Generate
-const images = [
-  'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=500&q=80',
-  'https://images.unsplash.com/photo-1534996858221-380b92700493?w=500&q=80',
-  'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80',
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&q=80',
-];
-let imgIdx = 0;
-let credits = 200;
+const imgs=['https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=500&q=80','https://images.unsplash.com/photo-1534996858221-380b92700493?w=500&q=80','https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80','https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&q=80'];
+let ii=0,cr=200;
+function sd(){const e=document.getElementById('cb');e.scrollTop=e.scrollHeight}
 
-function scrollDown() {
-  const el = document.getElementById('chat-body');
-  el.scrollTop = el.scrollHeight;
-}
+function go(){
+  const i=document.getElementById('pi'),t=i.value.trim();
+  if(!t)return;i.value='';
+  const e=document.getElementById('emp');if(e)e.style.display='none';
+  const b=document.getElementById('cb'),m=document.getElementById('cm').textContent;
+  const vid=m.includes('WAN')||m.includes('Lip'),c=vid?40:2;
 
-function generate() {
-  const input = document.getElementById('prompt-input');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
+  const u=document.createElement('div');u.className='mb';
+  u.innerHTML=`<div class="u-msg"><div class="u-lbl"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> You</div><div class="u-txt">${t}</div></div>`;
+  b.appendChild(u);sd();
 
-  // Hide empty state
-  const empty = document.getElementById('empty-state');
-  if (empty) empty.style.display = 'none';
+  const lid='l'+Date.now(),l=document.createElement('div');l.className='mb';l.id=lid;
+  l.innerHTML=`<div><div class="ai-lbl"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7L12 16.4 5.7 21l2.3-7L2 9.4h7.6z"/></svg> Workroom AI</div><div class="ai-txt">Generating with ${m}...</div><div class="ai-meta"><span class="mtag">Model: <b>${m}</b></span><span class="mtag">Cost: <b>${c}</b></span></div><div class="pbar"><div class="pfill"></div></div></div>`;
+  b.appendChild(l);sd();
 
-  const body = document.getElementById('chat-body');
-  const model = document.getElementById('current-model').textContent;
-  const isVideo = model.includes('WAN') || model.includes('Lip');
-  const cost = isVideo ? 40 : 2;
-
-  // User message
-  const userEl = document.createElement('div');
-  userEl.className = 'msg-block';
-  userEl.innerHTML = `
-    <div class="msg-user-block">
-      <div class="msg-user-label">👤 You</div>
-      <div class="msg-user-text">${text}</div>
-    </div>`;
-  body.appendChild(userEl);
-  scrollDown();
-
-  // AI loading
-  const loadId = 'load-' + Date.now();
-  const loadEl = document.createElement('div');
-  loadEl.className = 'msg-block';
-  loadEl.id = loadId;
-  loadEl.innerHTML = `
-    <div class="msg-ai-block">
-      <div class="msg-ai-label">✨ Workroom AI</div>
-      <div class="msg-ai-text">Generating with <b>${model}</b>...</div>
-      <div class="msg-ai-meta">
-        <span class="meta-tag">Model: <b>${model}</b></span>
-        <span class="meta-tag">Cost: <b>${cost} 🪙</b></span>
-      </div>
-      <div class="progress-wrap">
-        <div class="progress-bar"><div class="progress-fill"></div></div>
-      </div>
-    </div>`;
-  body.appendChild(loadEl);
-  scrollDown();
-
-  // Result after delay
-  setTimeout(() => {
-    credits -= cost;
-    document.getElementById('credit-count').textContent = credits;
-    const img = images[imgIdx % images.length];
-    imgIdx++;
-
-    loadEl.innerHTML = `
-      <div class="msg-ai-block">
-        <div class="msg-ai-label">✨ Workroom AI</div>
-        <div class="msg-ai-text">Done! Here's your ${isVideo ? 'video' : 'image'}:</div>
-        <div class="msg-ai-meta">
-          <span class="meta-tag">Model: <b>${model}</b></span>
-          <span class="meta-tag">Cost: <b>${cost} 🪙</b></span>
-          <span class="meta-tag">Remaining: <b>${credits} 🪙</b></span>
-        </div>
-        <div class="result-card">
-          <img class="result-image" src="${img}" alt="result">
-          <div class="result-footer">
-            <div class="result-cost">${isVideo ? '🎬' : '🖼'} ${model}</div>
-            <div class="result-actions">
-              <button class="r-btn">💾</button>
-              <button class="r-btn">📤</button>
-              <button class="r-btn r-btn-primary" onclick="document.getElementById('prompt-input').value='Make it more vibrant';document.getElementById('prompt-input').focus();">🔄</button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    scrollDown();
-  }, 2500);
+  setTimeout(()=>{
+    cr-=c;document.getElementById('cc').textContent=cr;
+    const img=imgs[ii%imgs.length];ii++;
+    l.innerHTML=`<div><div class="ai-lbl"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7L12 16.4 5.7 21l2.3-7L2 9.4h7.6z"/></svg> Workroom AI</div><div class="ai-txt">Here's your ${vid?'video':'image'}:</div><div class="ai-meta"><span class="mtag">Model: <b>${m}</b></span><span class="mtag">Cost: <b>${c}</b></span><span class="mtag">Left: <b>${cr}</b></span></div><div class="res"><img src="${img}" alt="r"><div class="res-ft"><div class="res-info">${vid?'Video':'Image'} · ${m}</div><div class="res-acts"><button class="rb"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></button><button class="rb"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button><button class="rb rb-p" onclick="document.getElementById('pi').value='Make it more vibrant';document.getElementById('pi').focus()"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button></div></div></div></div>`;
+    sd();
+  },2500);
 }
 </script>
 </body>
