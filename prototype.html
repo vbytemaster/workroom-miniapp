@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Workroom Mini App — Prototype</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #1a1a2e;
+  --bg2: #16162a;
+  --bg3: #1e1e3a;
+  --border: #2a2a4a;
+  --accent: #7c3aed;
+  --accent2: #6d28d9;
+  --text: #ffffff;
+  --muted: #9ca3af;
+  --green: #4ade80;
+  --blue: #60a5fa;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.header-logo {
+  font-size: 12px;
+  letter-spacing: 4px;
+  font-weight: 300;
+}
+.header-badge {
+  background: var(--accent);
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  margin-left: 4px;
+}
+.credits {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.credits span { color: var(--accent); }
+
+/* Tab bar */
+.tabs {
+  display: flex;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tab {
+  flex: 1;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.tab-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+/* Content */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Chat */
+.chat-messages {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.msg {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.msg-bot {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.msg-user {
+  background: var(--accent);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.msg-bot .msg-name {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.msg-user .msg-name {
+  font-size: 11px;
+  opacity: 0.7;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-align: right;
+}
+
+/* Quick actions */
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.quick-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.quick-btn:hover { border-color: var(--accent); background: var(--accent2); }
+
+/* Generation card */
+.gen-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 10px;
+}
+.gen-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+.gen-card-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.gen-tag {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.gen-tag b { color: var(--text); }
+.gen-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.gen-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.gen-btn-primary { background: var(--accent); color: white; }
+.gen-btn-primary:hover { background: var(--accent2); }
+.gen-btn-secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+
+/* Image preview */
+.gen-preview {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, #2d1b69 0%, #1a1a2e 50%, #0d2137 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.gen-preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.gen-preview-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: 8px;
+}
+.gen-preview:hover .gen-preview-overlay { opacity: 1; }
+.preview-btn {
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Progress */
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg);
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--blue));
+  border-radius: 3px;
+  animation: progress 3s ease-in-out infinite;
+}
+@keyframes progress { 0% { width: 0%; } 50% { width: 75%; } 100% { width: 100%; } }
+
+/* Result actions row */
+.result-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.result-btn {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.result-btn:hover { border-color: var(--accent); }
+
+/* Input area */
+.input-area {
+  padding: 12px 16px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+.input-wrap {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+}
+.input-wrap input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 12px 10px;
+  font-size: 14px;
+  outline: none;
+}
+.input-wrap input::placeholder { color: var(--muted); }
+.attach-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.send-btn:hover { background: var(--accent2); }
+
+/* Account screen */
+.screen-content { padding: 20px 16px; }
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.profile-name { font-size: 16px; font-weight: 600; }
+.profile-email { font-size: 13px; color: var(--muted); }
+.info-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-label { color: var(--muted); }
+.logout-btn {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+/* Credits screen */
+.plan-card {
+  background: linear-gradient(135deg, var(--bg3), var(--accent2));
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.plan-name { font-size: 24px; font-weight: 700; }
+.plan-type { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.credits-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  margin: 16px 0 8px;
+}
+.credits-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  width: 100%;
+}
+.credits-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+}
+.upgrade-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+/* Settings */
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.setting-label { font-size: 14px; }
+.setting-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.toggle {
+  width: 44px;
+  height: 24px;
+  background: var(--border);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.toggle.on { background: var(--accent); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s;
+}
+.toggle.on::after { transform: translateX(20px); }
+.select-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Hide screens */
+.screen { display: none; height: 100%; }
+.screen.active { display: flex; flex-direction: column; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-logo">EVERYPIXEL <span class="header-badge">WorkRoom</span></div>
+  <div class="credits"><span>200</span> 🪙</div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" data-tab="chat"><span class="tab-icon">🤖</span>AI</div>
+  <div class="tab" data-tab="account"><span class="tab-icon">👤</span>Account</div>
+  <div class="tab" data-tab="credits"><span class="tab-icon">💳</span>Credits</div>
+  <div class="tab" data-tab="help"><span class="tab-icon">❓</span>Help</div>
+  <div class="tab" data-tab="settings"><span class="tab-icon">⚙️</span>Settings</div>
+</div>
+
+<!-- CHAT SCREEN -->
+<div class="screen active" id="screen-chat">
+  <div class="content" id="chat-scroll">
+    <div class="chat-messages" id="chat-messages">
+
+      <!-- Bot welcome -->
+      <div class="msg msg-bot">
+        <div class="msg-name">✨ Workroom AI</div>
+        Hi! I'm your Workroom AI assistant. Describe what you want to create, and I'll handle the rest.
+        <div class="quick-actions">
+          <button class="quick-btn" onclick="sendQuick('🖼 Generate an image')">🖼 Image</button>
+          <button class="quick-btn" onclick="sendQuick('🎬 Create a video')">🎬 Video</button>
+          <button class="quick-btn" onclick="sendQuick('🎤 Generate voiceover')">🎤 Voice</button>
+          <button class="quick-btn" onclick="sendQuick('👄 Lip sync a video')">👄 Lip Sync</button>
+        </div>
+      </div>
+
+      <!-- User message -->
+      <div class="msg msg-user">
+        <div class="msg-name">You</div>
+        Create a cyberpunk city street at night, neon lights, rainy, cinematic
+      </div>
+
+      <!-- Bot: generation card -->
+      <div class="msg msg-bot">
+        <div class="msg-name">✨ Workroom AI</div>
+        Here's what I'll create:
+        <div class="gen-card">
+          <div class="gen-card-title">🖼 Picture Lab — Image Generation</div>
+          <div class="gen-card-row">
+            <span class="gen-tag">Model: <b>Seedream 4.0</b></span>
+            <span class="gen-tag">Ratio: <b>16:9</b></span>
+            <span class="gen-tag">Cost: <b>2 🪙</b></span>
+          </div>
+          <div style="font-size:13px; color: var(--muted); margin-top:4px;">
+            <em>"Cyberpunk city street at night, neon lights reflecting on wet pavement, rain, cinematic atmosphere, detailed, 8k"</em>
+          </div>
+          <div class="gen-actions">
+            <button class="gen-btn gen-btn-primary" onclick="showGenerating()">✅ Generate</button>
+            <button class="gen-btn gen-btn-secondary">✏️ Edit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bot: generating... -->
+      <div class="msg msg-bot" id="msg-generating" style="display:none">
+        <div class="msg-name">✨ Workroom AI</div>
+        ⏳ Generating your image...
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+      </div>
+
+      <!-- Bot: result -->
+      <div class="msg msg-bot" id="msg-result" style="display:none">
+        <div class="msg-name">✨ Workroom AI</div>
+        Done! Here's your image:
+        <div class="gen-preview">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80" alt="cyberpunk">
+        </div>
+        <div style="font-size:12px; color:var(--muted); margin-top:6px;">Credits used: 2 🪙 • Remaining: 198 🪙</div>
+        <div class="result-actions">
+          <button class="result-btn">💾 Save to Assets</button>
+          <button class="result-btn">📤 Share</button>
+          <button class="result-btn" onclick="sendQuick('Make it more vibrant')">🔄 Regenerate</button>
+          <button class="result-btn" onclick="sendQuick('Now make a video from this')">🎬 To Video</button>
+        </div>
+      </div>
+
+      <!-- Continuation -->
+      <div class="msg msg-user" id="msg-continue" style="display:none">
+        <div class="msg-name">You</div>
+        Now make a 5 second video from this, 9:16 vertical
+      </div>
+
+      <div class="msg msg-bot" id="msg-video-card" style="display:none">
+        <div class="msg-name">✨ Workroom AI</div>
+        Got it! Using your image as start frame:
+        <div class="gen-card">
+          <div class="gen-card-title">🎬 Cinema Motion — Video Generation</div>
+          <div class="gen-card-row">
+            <span class="gen-tag">Model: <b>WAN 2.2</b></span>
+            <span class="gen-tag">Duration: <b>5s</b></span>
+            <span class="gen-tag">Ratio: <b>9:16</b></span>
+            <span class="gen-tag">Quality: <b>720p</b></span>
+            <span class="gen-tag">Cost: <b>40 🪙</b></span>
+          </div>
+          <div style="font-size:13px; color:var(--muted); margin-top:4px;">
+            Start frame: <em>your generated image</em><br>
+            Prompt: <em>"Camera slowly pushes forward through rainy cyberpunk street, neon reflections ripple in puddles"</em>
+          </div>
+          <div class="gen-actions">
+            <button class="gen-btn gen-btn-primary">✅ Generate 40 🪙</button>
+            <button class="gen-btn gen-btn-secondary">✏️ Edit</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area">
+    <div class="input-wrap">
+      <button class="attach-btn">📎</button>
+      <input type="text" placeholder="Describe what you want to create..." id="chat-input" onkeydown="if(event.key==='Enter')sendMsg()">
+    </div>
+    <button class="send-btn" onclick="sendMsg()">➤</button>
+  </div>
+</div>
+
+<!-- ACCOUNT SCREEN -->
+<div class="screen" id="screen-account">
+  <div class="content">
+    <div class="screen-content">
+      <div class="profile-header">
+        <div class="avatar">👤</div>
+        <div>
+          <div class="profile-name">vtarnakin@mail.ru</div>
+          <div class="profile-email">vtarnakin@mail.ru</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-row">
+          <span class="info-label">Username</span>
+          <span>vtarnakin@mail.ru ✏️</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email</span>
+          <span>vtarnakin@mail.ru ✏️</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Password</span>
+          <span>••••••••••• ✏️</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Provider</span>
+          <span>Email/Password</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Verified</span>
+          <span style="color: #f87171;">No ⚠️</span>
+        </div>
+      </div>
+
+      <div style="font-size:13px; font-weight:600; margin-bottom:8px;">Credit History</div>
+      <div class="info-card">
+        <div class="info-row">
+          <span>Subscription</span>
+          <span>Trial • <span style="color:var(--green)">+200 🪙</span></span>
+        </div>
+      </div>
+
+      <button class="logout-btn">🚪 Log out</button>
+    </div>
+  </div>
+</div>
+
+<!-- CREDITS SCREEN -->
+<div class="screen" id="screen-credits">
+  <div class="content">
+    <div class="screen-content">
+      <div class="plan-card">
+        <div class="plan-name">Trial</div>
+        <div class="plan-type">200 Credits / One-time</div>
+        <div class="credits-bar"><div class="credits-fill"></div></div>
+        <div class="credits-info">
+          <span>Credits left: <b style="color:white">200/200</b></span>
+          <span>Valid: <b style="color:white">Mar 18, 2026</b></span>
+        </div>
+      </div>
+
+      <button class="upgrade-btn">⬆️ Upgrade Plan</button>
+
+      <div style="font-size:15px; font-weight:600; margin: 24px 0 12px;">Plans</div>
+
+      <div class="info-card" style="border-color: var(--border)">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:600;">Starter</div>
+            <div style="color:var(--muted); font-size:13px;">720 credits/mo</div>
+          </div>
+          <div style="font-size:20px; font-weight:700;">$9.99<span style="font-size:13px; color:var(--muted)">/mo</span></div>
+        </div>
+      </div>
+
+      <div class="info-card" style="border-color: var(--accent)">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:600;">Standard <span style="background:var(--accent); padding:2px 6px; border-radius:4px; font-size:10px;">BEST</span></div>
+            <div style="color:var(--muted); font-size:13px;">1560 credits/mo</div>
+          </div>
+          <div style="font-size:20px; font-weight:700;">$19.99<span style="font-size:13px; color:var(--muted)">/mo</span></div>
+        </div>
+      </div>
+
+      <div class="info-card" style="border-color: var(--accent); background: linear-gradient(135deg, var(--bg3), var(--accent2))">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:600;">Professional</div>
+            <div style="color:var(--muted); font-size:13px;">4240 credits/mo</div>
+          </div>
+          <div style="font-size:20px; font-weight:700;">$49.99<span style="font-size:13px; color:var(--muted)">/mo</span></div>
+        </div>
+      </div>
+
+      <div style="font-size:15px; font-weight:600; margin: 24px 0 12px;">Payment History</div>
+      <div class="info-card">
+        <div style="text-align:center; padding:20px 0; color:var(--muted); font-size:14px;">
+          No spending to show yet
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HELP SCREEN -->
+<div class="screen" id="screen-help">
+  <div class="content">
+    <div class="screen-content">
+      <h2 style="font-size:20px; margin-bottom:16px;">Help Center</h2>
+
+      <div class="info-card" style="cursor:pointer">
+        <div style="font-weight:600;">🖼 How to generate images?</div>
+        <div style="color:var(--muted); font-size:13px; margin-top:4px;">Describe what you want in the AI chat and hit Generate</div>
+      </div>
+      <div class="info-card" style="cursor:pointer">
+        <div style="font-weight:600;">🎬 How to create videos?</div>
+        <div style="color:var(--muted); font-size:13px; margin-top:4px;">Ask AI to create a video or convert an existing image to motion</div>
+      </div>
+      <div class="info-card" style="cursor:pointer">
+        <div style="font-weight:600;">🪙 How do credits work?</div>
+        <div style="color:var(--muted); font-size:13px; margin-top:4px;">Each generation costs credits. Images ~2, Videos ~40 credits</div>
+      </div>
+      <div class="info-card" style="cursor:pointer">
+        <div style="font-weight:600;">🔗 Can I use the web version?</div>
+        <div style="color:var(--muted); font-size:13px; margin-top:4px;">Yes! Visit app.everypixel.com for the full desktop experience</div>
+      </div>
+
+      <div style="text-align:center; margin-top:24px;">
+        <div style="color:var(--muted); font-size:13px;">Need more help?</div>
+        <a href="mailto:workroom@everypixel.com" style="color:var(--accent); font-size:14px;">workroom@everypixel.com</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS SCREEN -->
+<div class="screen" id="screen-settings">
+  <div class="content">
+    <div class="screen-content">
+      <h2 style="font-size:20px; margin-bottom:16px;">⚙️ AI Settings</h2>
+
+      <div class="info-card">
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">Default Model</div>
+            <div class="setting-desc">For image generation</div>
+          </div>
+          <button class="select-btn">Seedream 4.0 ▾</button>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">Video Model</div>
+            <div class="setting-desc">For video generation</div>
+          </div>
+          <button class="select-btn">WAN 2.2 ▾</button>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">Default Ratio</div>
+            <div class="setting-desc">Image aspect ratio</div>
+          </div>
+          <button class="select-btn">16:9 ▾</button>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">Language</div>
+          </div>
+          <button class="select-btn">English ▾</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">Auto-save to Assets</div>
+            <div class="setting-desc">Save generated content automatically</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">Show cost per request</div>
+            <div class="setting-desc">Display credits before generating</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="setting-item">
+          <div>
+            <div class="setting-label">Keep chat history</div>
+            <div class="setting-desc">Preserve context between sessions</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="setting-item" style="border:none">
+          <div>
+            <div class="setting-label">Enhanced prompts</div>
+            <div class="setting-desc">AI improves your prompts automatically</div>
+          </div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+
+      <button class="logout-btn" style="border-color:var(--muted); color:var(--muted);">🗑 Clear Chat History</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('screen-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+function scrollChat() {
+  const el = document.getElementById('chat-scroll');
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendQuick(text) {
+  const msgs = document.getElementById('chat-messages');
+  const msg = document.createElement('div');
+  msg.className = 'msg msg-user';
+  msg.innerHTML = '<div class="msg-name">You</div>' + text;
+  msgs.appendChild(msg);
+  scrollChat();
+}
+
+function sendMsg() {
+  const input = document.getElementById('chat-input');
+  if (!input.value.trim()) return;
+  sendQuick(input.value);
+  input.value = '';
+}
+
+function showGenerating() {
+  document.getElementById('msg-generating').style.display = 'block';
+  scrollChat();
+  setTimeout(() => {
+    document.getElementById('msg-generating').style.display = 'none';
+    document.getElementById('msg-result').style.display = 'block';
+    scrollChat();
+    setTimeout(() => {
+      document.getElementById('msg-continue').style.display = 'block';
+      scrollChat();
+      setTimeout(() => {
+        document.getElementById('msg-video-card').style.display = 'block';
+        scrollChat();
+      }, 1500);
+    }, 2000);
+  }, 3000);
+}
+</script>
+</body>
+</html>
