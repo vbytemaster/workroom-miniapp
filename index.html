@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Workroom</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #1a1a2e;
+    --card-bg: #16162a;
+    --input-bg: #1e1e3a;
+    --input-border: #3a3a5c;
+    --input-focus: #7c3aed;
+    --accent: #7c3aed;
+    --accent-hover: #6d28d9;
+    --text: #ffffff;
+    --text-muted: #9ca3af;
+    --text-link: #a78bfa;
+    --divider: #3a3a5c;
+    --google-bg: #1e1e3a;
+    --google-border: #3a3a5c;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 16px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .logo {
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 300;
+  }
+
+  .logo-badge {
+    display: inline-block;
+    background: #7c3aed;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 12px 0 6px;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+
+  /* Google button */
+  .google-btn {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--google-border);
+    border-radius: 10px;
+    background: var(--google-bg);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: border-color 0.2s;
+  }
+  .google-btn:hover { border-color: var(--input-focus); }
+
+  .google-icon {
+    width: 20px; height: 20px;
+  }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    gap: 12px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--divider);
+  }
+  .divider span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* Form */
+  .form-group {
+    text-align: left;
+    margin-bottom: 14px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input::placeholder { color: var(--text-muted); }
+  .form-group input:focus { border-color: var(--input-focus); }
+
+  .password-wrap {
+    position: relative;
+  }
+  .password-wrap input { padding-right: 44px; }
+  .password-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  /* Submit */
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.2s;
+  }
+  .submit-btn:hover { background: var(--accent-hover); }
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Links */
+  .footer-links {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .footer-links a {
+    color: var(--text);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .forgot-link {
+    display: block;
+    margin-top: 10px;
+    color: var(--text-muted);
+    text-decoration: underline;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .contact {
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .contact a { color: var(--text-muted); text-decoration: underline; }
+
+  /* Error */
+  .error-msg {
+    background: #7c3aed22;
+    border: 1px solid #7c3aed55;
+    color: #f87171;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    display: none;
+  }
+
+  /* Tabs hidden, controlled by JS */
+  .tab { display: none; }
+  .tab.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">EVERYPIXEL <span class="logo-badge">WorkRoom</span></div>
+
+  <!-- LOGIN TAB -->
+  <div id="tab-login" class="tab active">
+    <div class="title">Welcome Back 👋</div>
+    <div class="subtitle">Log in to access your projects and<br>bring your ideas to life</div>
+
+    <button class="google-btn" onclick="googleAuth('login')">
+      <svg class="google-icon" viewBox="0 0 24 24">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A11.96 11.96 0 0 0 0 12c0 1.94.46 3.77 1.28 5.4l3.56-2.77.01-.54z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Sign In with Google
+    </button>
+
+    <div class="divider"><span>OR</span></div>
+
+    <div id="error-login" class="error-msg"></div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="Enter your email">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="password-wrap">
+        <input type="password" id="login-password" placeholder="Enter your password">
+        <button class="password-toggle" onclick="togglePassword('login-password', this)">👁</button>
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="submitLogin()">Log in</button>
+
+    <div class="footer-links">
+      Don't have an account? <a onclick="switchTab('signup')">Sign up</a>
+      <a class="forgot-link" onclick="forgotPassword()">Forgot Password?</a>
+    </div>
+  </div>
+
+  <!-- SIGNUP TAB -->
+  <div id="tab-signup" class="tab">
+    <div class="title">Step In. Create. Inspire.</div>
+    <div class="subtitle">AI-powered tools to bring your ideas<br>to life. Start your journey now!</div>
+
+    <button class="google-btn" onclick="googleAuth('signup')">
+      <svg class="google-icon" viewBox="0 0 24 24">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A11.96 11.96 0 0 0 0 12c0 1.94.46 3.77 1.28 5.4l3.56-2.77.01-.54z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Sign Up with Google
+    </button>
+
+    <div class="divider"><span>OR</span></div>
+
+    <div id="error-signup" class="error-msg"></div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="signup-email" placeholder="Enter your email">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <div class="password-wrap">
+        <input type="password" id="signup-password" placeholder="Enter your password">
+        <button class="password-toggle" onclick="togglePassword('signup-password', this)">👁</button>
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="submitSignup()">Sign up</button>
+
+    <div class="footer-links">
+      Already have an account? <a onclick="switchTab('login')">Log in</a>
+    </div>
+  </div>
+
+  <div class="contact">
+    Having trouble? Contact us at <a href="mailto:workroom@everypixel.com">workroom@everypixel.com</a>
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+if (tg) {
+  tg.ready();
+  tg.expand();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+function togglePassword(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+function showError(tab, msg) {
+  const el = document.getElementById('error-' + tab);
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+function googleAuth(mode) {
+  // TODO: redirect to Google OAuth
+  // For now, send data back to bot
+  if (tg) {
+    tg.sendData(JSON.stringify({ action: 'google_' + mode }));
+  } else {
+    alert('Google ' + mode + ' — will redirect to OAuth');
+  }
+}
+
+function submitLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+
+  if (!email || !password) {
+    showError('login', 'Please fill in all fields');
+    return;
+  }
+
+  // TODO: POST to Workroom API /api/auth/login
+  if (tg) {
+    tg.sendData(JSON.stringify({ action: 'login', email, password }));
+  } else {
+    alert('Login: ' + email);
+  }
+}
+
+function submitSignup() {
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+
+  if (!email || !password) {
+    showError('signup', 'Please fill in all fields');
+    return;
+  }
+
+  // TODO: POST to Workroom API /api/auth/signup
+  if (tg) {
+    tg.sendData(JSON.stringify({ action: 'signup', email, password }));
+  } else {
+    alert('Signup: ' + email);
+  }
+}
+
+function forgotPassword() {
+  if (tg) {
+    tg.sendData(JSON.stringify({ action: 'forgot_password' }));
+  } else {
+    alert('Forgot password flow');
+  }
+}
+</script>
+</body>
+</html>
