@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=375">
+<title>Credit History Preview</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0c0c0e; color:#e4e4e7; font-family:'Inter',-apple-system,sans-serif; padding:16px; max-width:400px; }
+  .card { background:#141416; border:1px solid #2a2a2e; border-radius:14px; padding:16px; margin-bottom:12px; }
+  .card-t { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#7c3aed; margin-bottom:14px; }
+  .tx-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #1c1c1f; }
+  .tx-row:last-child { border-bottom:none; }
+  .tx-icon { font-size:20px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:#1c1c1f; border-radius:10px; flex-shrink:0; }
+  .tx-info { display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
+  .tx-op { font-size:13px; font-weight:500; color:#e4e4e7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tx-date { font-size:11px; color:#71717a; }
+  .tx-amt { font-size:14px; font-weight:600; white-space:nowrap; flex-shrink:0; }
+  .tx-minus { color:#ef4444; }
+  .tx-plus { color:#22c55e; }
+  .view-all { display:block; text-align:center; font-size:12px; color:#7c3aed; margin-top:12px; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-t">Credit History</div>
+
+  <div class="tx-row">
+    <div class="tx-icon">🖼</div>
+    <div class="tx-info">
+      <span class="tx-op">Picture Lab</span>
+      <span class="tx-date">Feb 16, 2026 · Photo</span>
+    </div>
+    <span class="tx-amt tx-minus">−4</span>
+  </div>
+
+  <div class="tx-row">
+    <div class="tx-icon">🖼</div>
+    <div class="tx-info">
+      <span class="tx-op">Picture Lab</span>
+      <span class="tx-date">Feb 16, 2026 · Photo</span>
+    </div>
+    <span class="tx-amt tx-minus">−4</span>
+  </div>
+
+  <div class="tx-row">
+    <div class="tx-icon">🖼</div>
+    <div class="tx-info">
+      <span class="tx-op">Picture Lab</span>
+      <span class="tx-date">Feb 16, 2026 · Photo</span>
+    </div>
+    <span class="tx-amt tx-minus">−4</span>
+  </div>
+
+  <div class="tx-row">
+    <div class="tx-icon">🖼</div>
+    <div class="tx-info">
+      <span class="tx-op">Picture Lab</span>
+      <span class="tx-date">Feb 16, 2026 · Photo</span>
+    </div>
+    <span class="tx-amt tx-minus">−4</span>
+  </div>
+
+  <div class="tx-row">
+    <div class="tx-icon">🎁</div>
+    <div class="tx-info">
+      <span class="tx-op">Subscription</span>
+      <span class="tx-date">Feb 15, 2026 · Trial</span>
+    </div>
+    <span class="tx-amt tx-plus">+200</span>
+  </div>
+
+  <a href="#" class="view-all">View all →</a>
+</div>
+
+</body>
+</html>
